@@ -3,6 +3,7 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 from .helpers import readarray
+import sys
 
 
 class Cache:
@@ -69,8 +70,8 @@ class Main:
         self.validation()
         n_caches = len(self.caches)
         print(n_caches)
-        for i in range(n_caches):
-            print(self.caches[i].id, *self.caches[i].videos)
+        for cache in self.caches:
+            print(cache.id, *cache.videos)
 
     def load_data(self):
         """Load data."""
