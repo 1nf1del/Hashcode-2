@@ -3,7 +3,6 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 from .helpers import readarray
-import sys
 
 
 class Cache:
@@ -70,8 +69,8 @@ class Main:
         self.validation()
         n_caches = len(self.caches)
         print(n_caches)
-        for cache in self.caches:
-            print(cache.id, *cache.videos)
+        for i in range(n_caches):
+            print(self.caches[i].id, *self.caches[i].videos)
 
     def load_data(self):
         """Load data."""
@@ -103,11 +102,9 @@ class Main:
                                       maximum)
         return average * 1000 / self.R
 
-    def dummy(self):
-        for c
-
     def run(self):
         """Main function."""
         self.load_data()
-        self.caches = [Cache(i, list()) for i in range(self.C)]
+        for i in range():
+            self.caches = [Cache(0, [2]), Cache(1, [3, 1]), Cache(2, [0, 1])]
         self.save_data()
