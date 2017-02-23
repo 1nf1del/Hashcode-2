@@ -91,16 +91,22 @@ class Main:
         print(len(self.requests))
 
     def scoring(self):
-        """Scoring function."""
         average = 0.
         for request in self.requests:
             maximum = self.endpoints[request.R_e].latency
             for c, L_c in self.endpoints[request.R_e].connections.items():
                 if request.R_v in self.caches[c].videos and L_c < maximum:
                     maximum = L_c
-            average += request.R_n * (self.endpoints[request.R_e].latency -
-                                      maximum)
+            average += request.R_n * (self.endpoints[request.R_e].latency - maximum)
         return average * 1000 / self.R
+
+    def dummy(self):
+        while True:
+            boolean = False
+            while v < self.V:
+                for cache in self.caches:
+                    cache.add_video
+                    v += 1
 
     def run(self):
         """Main function."""
