@@ -10,6 +10,20 @@ def readint(): return int(raw_input())
 def readarray(f): return map(f, raw_input().split())
 
 
+class Endpoint:
+
+    def __init__(self, endpoint, latency, K):
+        self.endpoint = endpoint    # Id enpoint
+        self.latency = latency
+        self.K = K
+        self.connections = dict()   # {c: L_c} where c: ID cache server, L_c: latency
+
+class Request:
+    def __init__(self, request, R_v, R_e, R_n):
+        self.request = request  # Id request
+        self.R_v = R_v  # Id video
+        self.R_e = R_e  # Id endpoint
+        self.R_n = R_n  # Number of requests
 
 class Main:
     """Main class."""
@@ -24,17 +38,19 @@ class Main:
         return 'Main version %d' % (self._version)
 
     def load_data(self):
-        T = readint()
-        
-        for t in range(1, T + 1):
-            S = raw_input()
-            s = S[0]
-            for l in range(1, len(S)):
-                if S[l] < s[0]:
-                    s += S[l]
-                else:
-                    s = S[l] + s
-            print "Case #%d: %s" % (t, s)
+        self.V, self.E, self.R, self.C, self.X = readarray(int)
+        self.size_videos = readarray(int)
+        self.enpoints = list()
+        for i in range(self.E):
+            l, K = readarray(int)
+            self.endpoints.append(Endpoint(i, l, K))
+            for j in range(K):
+                c, L_c = readarray(int)
+                self.endpoints.connections[c] = L_c
+        self.requests = list()
+        for i in range(self.R):
+            R_v, R_e, R_n = readarray(int)
+            self.requests.append(Request(i, R_v, R_e, R_n))
 
     def run(self):
         """Main function."""
