@@ -111,6 +111,5 @@ class Main:
     def run(self):
         """Main function."""
         self.load_data()
-        for i in range():
-            self.caches = [Cache(i, list()) for i in range(self.C)]
+        self.caches = [Cache(i, list()) for i in range(self.C)]
         self.save_data()
