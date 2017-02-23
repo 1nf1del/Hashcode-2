@@ -2,10 +2,10 @@
 
 set -e
 
-time python sample/main.py < data/kittens.in > results/kittens.out
 time python sample/main.py < data/me_at_the_zoo.in > results/me_at_the_zoo.out
 time python sample/main.py < data/trending_today.in > results/trending_today.out
 time python sample/main.py < data/videos_worth_spreading.in > \
     results/videos_worth_spreading.out
+time python sample/main.py < data/kittens.in > results/kittens.out
 
 echo "Done!"
