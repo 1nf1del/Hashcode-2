@@ -12,7 +12,16 @@ class Cache:
         """Init cache."""
         self.id = id
         self.videos = set(videos)
+        self.size = 0.
 
+    def add_video(self, X, video, size_videos):
+        if video in self.videos:
+            return false
+        if self.size + size_videos[video] > X:
+            return false
+        self.size += size_videos[video]
+        self.videos.add(video)
+        return True
 
 class Endpoint:
     """Class for endpoints."""
@@ -103,13 +112,15 @@ class Main:
         return average * 1000 / self.R
 
     def dummy(self):
-        """Scoring function."""
-        while True:
+
+        boolean = True
+        while boolean:
             boolean = False
             while v < self.V:
                 for cache in self.caches:
-                    cache.add_video
-                    v += 1
+                    if cache.add_video(v, self.size_videos):
+                        v += 1
+                        boolean = True
 
     def run(self):
         """Main function."""
