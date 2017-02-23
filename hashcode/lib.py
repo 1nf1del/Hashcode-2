@@ -84,7 +84,7 @@ class Main:
             for c, L_c in self.enpoints[request.R_e].connections.items:
                 if request.R_v in self.caches[c] and L_c < maximum:
                     maximum = L_c
-            average += (self.endpoints[request.R_e].latency - maximum)
+            average += request.R_n * (self.endpoints[request.R_e].latency - maximum)
         return average * 1000 / self.R
 
     def run(self):
