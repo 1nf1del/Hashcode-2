@@ -111,11 +111,8 @@ class Main:
             number_requests += request.R_n
         return average * 1000 / number_requests
 
-    def romain(self):
-        for enpoint in self.endpoints:
-
     def dummy(self):
-
+        """Run dummy."""
         boolean = True
         while boolean:
             boolean = False
