@@ -2,7 +2,7 @@
 
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
-from .helpers import test, readint, readarray
+from .helpers import readint, readarray
 
 import numpy as np
 
@@ -69,4 +69,3 @@ class Main:
     def run(self):
         """Main function."""
         self.load_data()
-        print(self._data)
