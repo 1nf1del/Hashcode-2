@@ -1,0 +1,1 @@
+"""Hashcode test module."""

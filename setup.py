@@ -11,5 +11,5 @@ setup(name='Hascode',
       author_email=['romain.brault@telecom-paristech.fr',
                     'paul.lagree@telecom-paristech.fr'],
       license='MIT',
-      packages=['Hashcode'],
+      packages=['hashcode'],
       zip_safe=False)
