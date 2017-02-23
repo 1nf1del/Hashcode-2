@@ -112,5 +112,5 @@ class Main:
         """Main function."""
         self.load_data()
         for i in range():
-            self.caches = [Cache(0, [2]), Cache(1, [3, 1]), Cache(2, [0, 1])]
+            self.caches = [Cache(i, list()) for i in range(self.C)]
         self.save_data()
