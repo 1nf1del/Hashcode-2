@@ -6,8 +6,8 @@ from .helpers import test
 
 import numpy as np
 
-def readint(): return int(raw_input())
-def readarray(f): return map(f, raw_input().split())
+def readint(): return int(input())
+def readarray(f): return map(f, input().split())
 
 
 class Endpoint:
@@ -51,6 +51,8 @@ class Main:
         for i in range(self.R):
             R_v, R_e, R_n = readarray(int)
             self.requests.append(Request(i, R_v, R_e, R_n))
+        print(self.R)
+        print(len(self.requests))
 
     def run(self):
         """Main function."""
