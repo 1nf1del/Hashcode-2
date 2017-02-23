@@ -19,3 +19,8 @@ Install hashcode::
 Run program::
 
     python samples/main.py
+
+Or::
+
+    chmod +x run
+    ./run
