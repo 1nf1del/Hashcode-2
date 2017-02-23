@@ -55,7 +55,7 @@ class Main:
         for i in range(len(self.caches)):
             size = 0
             for video_id in self.caches[i].videos:
-                print(video_id, len(self.size_videos))
+                # print(video_id, len(self.size_videos))
                 size += self.size_videos[video_id]
             if size > self.X:
                 good = False

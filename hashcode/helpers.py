@@ -2,7 +2,6 @@
 
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
-import numpy as np
 
 
 def readint():
@@ -12,4 +11,4 @@ def readint():
 
 def readarray(f):
     """Read array on standard output."""
-    return map(f, input().split())
+    return list(map(f, input().split()))
