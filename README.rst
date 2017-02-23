@@ -6,10 +6,10 @@
 .. |Python35| image:: https://img.shields.io/badge/python-3.5-blue.svg
 .. _Python35: https://github.com/RomainBrault/Hashcode
 
-Hashcode
+Hashcode |Travis|_ |Python35|_
 ========
 
-Hashcode qualification 2017 |Travis|_ |Python35|_
+Hashcode qualification 2017
 
 Environment
 ===========
