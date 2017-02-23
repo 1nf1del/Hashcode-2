@@ -33,8 +33,11 @@ class Endpoint:
         self.endpoint = endpoint  # Id enpoint
         self.latency = latency
         self.K = K
-        # {c: L_c} where c: ID cache server, L_c: latency
-        self.connections = dict()
+        # (c, L_c) where c: ID cache server, L_c: latency
+        self.connections = list()
+
+    def sort_connections(self):
+        self.connections.sort(key=lambda x: x[1])
 
 
 class Request:
@@ -93,7 +96,8 @@ class Main:
             self.endpoints.append(Endpoint(i, l, K))
             for j in range(K):
                 c, L_c = readarray(int)
-                self.endpoints[i].connections[c] = L_c
+                self.endpoints[i].connections.append(c, L_c)
+            self.endpoints[i].sort_connections()
         self.requests = list()
         for i in range(self.R):
             R_v, R_e, R_n = readarray(int)
@@ -105,7 +109,7 @@ class Main:
         number_requests = 0.
         for request in self.requests:
             maximum = self.endpoints[request.R_e].latency
-            for c, L_c in self.endpoints[request.R_e].connections.items():
+            for c, L_c in self.endpoints[request.R_e].connections:
                 if request.R_v in self.caches[c].videos and L_c < maximum:
                     maximum = L_c
             average += request.R_n * (self.endpoints[request.R_e].latency -
@@ -124,6 +128,10 @@ class Main:
                     if cache.add_video(self.X, v, self.size_videos):
                         boolean = True
                     v += 1
+
+    def better(self):
+        for request in self.requests:
+            for connection in self.endpoints[request.R_e].connections:
 
     def run(self):
         """Main function."""
