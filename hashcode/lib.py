@@ -129,6 +129,18 @@ class Main:
                         boolean = True
                     v += 1
 
+    def romain(self):
+        for endpoint in self.endpoints:
+            local_request = []
+            for request in self.requests:
+                if request.R_e == endpoint:
+                    local_request.append(request)
+            self.local_request.sort(key=lambda x: x.R_n)
+
+            for request in local_request:
+                for cache in self.caches:
+                    cache.add_video(self.X, request.R_v, self.size_videos)
+
     def better(self):
         for request in self.requests:
             for connection in self.endpoints[request.R_e].connections:
