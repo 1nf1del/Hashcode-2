@@ -45,7 +45,8 @@ class Main:
     @staticmethod
     def save_data(n_cache_servers):
         """Save data."""
-        with open('./bin/results.out', 'w') as file
+        with open('./bin/results.out', 'w') as file:
+            pass
 
     def load_data(self):
         """Load data."""
@@ -62,6 +63,8 @@ class Main:
         for i in range(self.R):
             R_v, R_e, R_n = readarray(int)
             self.requests.append(Request(i, R_v, R_e, R_n))
+        print(self.R)
+        print(len(self.requests))
 
     def run(self):
         """Main function."""
