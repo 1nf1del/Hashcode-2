@@ -23,9 +23,15 @@ class Main:
         """String representation."""
         return 'Main version %d' % (self._version)
 
+    @staticmethod
+    def save_data(n_cache_servers):
+        """Save data."""
+        with open('./bin/results.out', 'w') as file
+
     def load_data(self):
+        """Load data."""
         T = readint()
-        
+
         for t in range(1, T + 1):
             S = raw_input()
             s = S[0]
