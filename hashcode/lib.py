@@ -60,10 +60,6 @@ class Request:
         self.R_e = R_e  # Id endpoint
         self.R_n = R_n  # Number of requests
 
-def cost_request(request, endpoints):
-    endpoint = endpoints[request.R_e]
-    return request.R_n * (endpoint.latency - endpoint.connections[0][1])
-
 class Main:
     """Main class."""
 
@@ -156,10 +152,20 @@ class Main:
                         break
 
     def better(self):
+        def score_request(x):
+            if len(self.endpoints[x.R_e].connections) == 0:
+                return 0
+            return x.R_n * (self.endpoints[x.R_e].latency -
+                    self.endpoints[x.R_e].connections[0][1])
         # 1. Sort requests by interest
-        self.requests.sort(key=lambda x: cost_request(self.endpoints, x), reverse=True)
-        # 2. Deal with requests in the specified order
+        new_requests = list()
         for request in self.requests:
+            heuristic = score_request(request)
+            new_requests.append((heuristic, request))
+        new_requests.sort(key=lambda x: x[0], reverse=True)
+
+        # 2. Deal with requests in the specified order
+        for _, request in new_requests:
             for c, L_c in self.endpoints[request.R_e].connections:
                 # connection is (c, L_c)
                 if self.caches[c].add_video2(self.X, request.R_v, self.size_videos):
@@ -170,6 +176,6 @@ class Main:
         self.load_data()
         self.caches = [Cache(i, list()) for i in range(self.C)]
         # self.dummy()
-        self.romain()
+        self.better()
         # print(self.scoring())
         self.save_data()
