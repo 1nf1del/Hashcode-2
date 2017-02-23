@@ -1,5 +1,7 @@
-# Basic .gitattributes for a python repo.
+# Set the default behavior, in case people don't have core.autocrlf set.
+* text=auto
 
+# Basic .gitattributes for a python repo.
 # Source files
 # ============
 *.pxd       text
@@ -16,6 +18,14 @@
 *.pyc       binary
 *.pyd       binary
 *.pyo       binary
+
+# Whitespace
+# ==========
+*.pxd       whitespace=space-before-tab,tab-in-indent,trailing-space,tab
+*.py        whitespace=space-before-tab,tab-in-indent,trailing-space,tab
+*.py3       whitespace=space-before-tab,tab-in-indent,trailing-space,tab
+*.pyw       whitespace=space-before-tab,tab-in-indent,trailing-space,tab
+*.pyx       whitespace=space-before-tab,tab-in-indent,trailing-space,tab
 
 # Note: .db, .p, and .pkl files are associated
 # with the python modules ``pickle``, ``dbm.*``,
