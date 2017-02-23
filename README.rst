@@ -34,7 +34,7 @@ Usage
 
 Run program::
 
-    python samples/main.py
+    python sample/main.py
 
 Or::
 

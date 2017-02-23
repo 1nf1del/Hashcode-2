@@ -5,6 +5,6 @@ from __future__ import (absolute_import, division, print_function,
 import numpy as np
 
 
-def test():
+def test(data):
     """Test function."""
-    return np.zeros(10)
+    return np.exp(data)
