@@ -3,10 +3,10 @@
 .. |Travis| image:: https://travis-ci.com/RomainBrault/Hashcode.svg?token=BGkmfYrnrsiGdq17pxis&branch=master
 .. _Travis: https://travis-ci.com/RomainBrault/Hashcode
 
-.. |Python35| image:: https://img.shields.io/badge/python-3.5-blue.svg
-.. _Python35: https://github.com/RomainBrault/Hashcode
+.. |Python36| image:: https://img.shields.io/badge/python-3.6-blue.svg
+.. _Python36: https://github.com/RomainBrault/Hashcode
 
-Hashcode |Travis|_ |Python35|_
+Hashcode |Travis|_ |Python36|_
 ========
 
 Hashcode qualification 2017
