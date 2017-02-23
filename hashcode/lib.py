@@ -11,7 +11,7 @@ class Cache:
     def __init__(self, id, videos):
         """Init cache."""
         self.id = id
-        self.videos = videos
+        self.videos = set(videos)
 
 
 class Endpoint:
@@ -48,6 +48,9 @@ class Main:
     def __str__(self):
         """String representation."""
         return 'Main version %d' % (self._version)
+
+    def validation(self):
+        """Validate save."""
 
     def save_data(self):
         """Save data."""
