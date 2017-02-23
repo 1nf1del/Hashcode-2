@@ -1,12 +1,19 @@
 language: python
+python:
+  - "3"
+
+cache: pip
 
 # command to install dependencies
+before_install:
+  - pip install --user -r requirements.txt
+
+# command to install
 install:
-  - conda create -n hashcode python=3 anaconda numpy scipy ipython
-  - source activate hashcode
   - python setup.py install
 
 # command to run tests
 script:
   - chmod +x run
   - ./run
+
