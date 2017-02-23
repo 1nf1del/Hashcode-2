@@ -66,6 +66,16 @@ class Main:
         print(self.R)
         print(len(self.requests))
 
+    def scoring(self):
+        average = 0.
+        for request in self.requests:
+            maximum = self.endpoints[request.R_e].latency
+            for c, L_c in self.enpoints[request.R_e].connections.items:
+                if request.R_v in self.caches[c] and L_c < maximum:
+                    maximum = L_c
+            average += (self.endpoints[request.R_e].latency - maximum)
+        return average * 1000 / self.R
+
     def run(self):
         """Main function."""
         self.load_data()
