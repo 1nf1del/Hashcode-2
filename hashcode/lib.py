@@ -50,10 +50,23 @@ class Main:
         return 'Main version %d' % (self._version)
 
     def validation(self):
-        """Validate save."""
+        """Validate before save."""
+        good = True
+        for i in range(len(self.caches)):
+            size = 0
+            for video_id in self.caches[i].videos:
+                print(video_id, len(self.size_videos))
+                size += self.size_videos[video_id]
+            if size > self.X:
+                good = False
+                break
+
+        if good is False:
+            raise ValueError('Too much memory use for cache %d' % i)
 
     def save_data(self):
         """Save data."""
+        self.validation()
         n_caches = len(self.caches)
         print(n_caches)
         for i in range(n_caches):
