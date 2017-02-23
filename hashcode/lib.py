@@ -15,6 +15,7 @@ class Cache:
         self.size = 0.
 
     def add_video(self, X, video, size_videos):
+        """Add video to cache."""
         if video in self.videos:
             return False
         if self.size + size_videos[video] > X:
@@ -22,6 +23,7 @@ class Cache:
         self.size += size_videos[video]
         self.videos.add(video)
         return True
+
 
 class Endpoint:
     """Class for endpoints."""
