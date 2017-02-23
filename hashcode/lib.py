@@ -95,6 +95,7 @@ class Main:
             for j in range(K):
                 c, L_c = readarray(int)
                 self.endpoints[i].connections.append(c, L_c)
+            self.endpoints[i].sort_connections()
         self.requests = list()
         for i in range(self.R):
             R_v, R_e, R_n = readarray(int)
