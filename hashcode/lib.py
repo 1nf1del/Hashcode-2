@@ -24,6 +24,16 @@ class Cache:
         self.videos.add(video)
         return True
 
+    def add_video2(self, X, video, size_videos):
+        """Add video to cache."""
+        if video in self.videos:
+            return True
+        if self.size + size_videos[video] > X:
+            return False
+        self.size += size_videos[video]
+        self.videos.add(video)
+        return True
+
 
 class Endpoint:
     """Class for endpoints."""
@@ -50,6 +60,9 @@ class Request:
         self.R_e = R_e  # Id endpoint
         self.R_n = R_n  # Number of requests
 
+def cost_request(request, endpoints):
+    endpoint = endpoints[request.R_e]
+    return request.R_n * (endpoint.latency - endpoint.connections[0][1])
 
 class Main:
     """Main class."""
@@ -133,23 +146,30 @@ class Main:
         for endpoint in self.endpoints:
             local_request = []
             for request in self.requests:
-                if request.R_e == endpoint:
+                if request.R_e == endpoint.endpoint:
                     local_request.append(request)
-            self.local_request.sort(key=lambda x: x.R_n)
+            local_request.sort(key=lambda x: x.R_n)
 
             for request in local_request:
                 for cache in self.caches:
-                    cache.add_video(self.X, request.R_v, self.size_videos)
+                    if cache.add_video2(self.X, request.R_v, self.size_videos):
+                        break
 
     def better(self):
+        # 1. Sort requests by interest
+        self.requests.sort(key=lambda x: cost_request(self.endpoints, x), reverse=True)
+        # 2. Deal with requests in the specified order
         for request in self.requests:
-            for connection in self.endpoints[request.R_e].connections:
-                pass
+            for c, L_c in self.endpoints[request.R_e].connections:
+                # connection is (c, L_c)
+                if self.caches[c].add_video2(self.X, request.R_v, self.size_videos):
+                    break
 
     def run(self):
         """Main function."""
         self.load_data()
         self.caches = [Cache(i, list()) for i in range(self.C)]
-        self.dummy()
-        print(self.scoring())
-        # self.save_data()
+        # self.dummy()
+        self.romain()
+        # print(self.scoring())
+        self.save_data()
