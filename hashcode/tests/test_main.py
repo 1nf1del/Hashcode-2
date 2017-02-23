@@ -4,5 +4,5 @@ from hashcode import Main
 
 
 def test_main():
-    """Test ovk curl-free estimator fit."""
+    """Test hashcode main function."""
     Main.main()
