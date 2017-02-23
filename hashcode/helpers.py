@@ -12,9 +12,9 @@ def test(data):
 
 def readint():
     """Read array on standard input."""
-    return int(raw_input())
+    return int(input())
 
 
 def readarray(f):
     """Read array on standard output."""
-    return map(f, raw_input().split())
+    return map(f, input().split())

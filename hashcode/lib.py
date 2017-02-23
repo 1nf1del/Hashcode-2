@@ -52,13 +52,13 @@ class Main:
         """Load data."""
         self.V, self.E, self.R, self.C, self.X = readarray(int)
         self.size_videos = readarray(int)
-        self.enpoints = list()
+        self.endpoints = list()
         for i in range(self.E):
             l, K = readarray(int)
             self.endpoints.append(Endpoint(i, l, K))
             for j in range(K):
                 c, L_c = readarray(int)
-                self.endpoints.connections[c] = L_c
+                self.endpoints[i].connections[c] = L_c
         self.requests = list()
         for i in range(self.R):
             R_v, R_e, R_n = readarray(int)
@@ -69,4 +69,4 @@ class Main:
     def run(self):
         """Main function."""
         self.load_data()
-        print(test(self._data))
+        print(self._data)
