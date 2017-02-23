@@ -5,4 +5,5 @@ from hashcode import Main
 
 def test_main():
     """Test hashcode main function."""
-    Main.main()
+    main = Main()
+    main.run()
