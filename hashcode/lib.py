@@ -6,6 +6,10 @@ from .helpers import test
 
 import numpy as np
 
+def readint(): return int(raw_input())
+def readarray(f): return map(f, raw_input().split())
+
+
 
 class Main:
     """Main class."""
@@ -19,22 +23,20 @@ class Main:
         """String representation."""
         return 'Main version %d' % (self._version)
 
-    def load_data(self, filename):
-        """Load datafile."""
-        with open(filename, 'r') as file:
-            header = file.readline()
-            print(header)
-
-            line = file.readline()
-            n_lines, n_cases = [int(num) for num in line.split()]
-
-            self._data = np.empty((n_lines, n_cases))
-            for i in range(n_lines):
-                line = file.readline()
-                self._data[i, :] = [int(num) for num in line.split()]
+    def load_data(self):
+        T = readint()
+        
+        for t in range(1, T + 1):
+            S = raw_input()
+            s = S[0]
+            for l in range(1, len(S)):
+                if S[l] < s[0]:
+                    s += S[l]
+                else:
+                    s = S[l] + s
+            print "Case #%d: %s" % (t, s)
 
     def run(self):
         """Main function."""
-        print(self)
-        self.load_data('./data/dummy.dat')
+        self.load_data()
         print(test(self._data))
