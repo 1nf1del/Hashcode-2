@@ -1,0 +1,13 @@
+language: python
+
+# command to install dependencies
+install:
+  - conda create -n hashcode python=3 anaconda numpy scipy ipython
+  - source activate hashcode
+  - python setup.py install
+
+# command to run tests
+script:
+  - chmod +x run
+  - ./run
+

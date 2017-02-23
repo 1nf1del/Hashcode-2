@@ -1,6 +1,6 @@
 """Hashcode qualification round 2017."""
 
-import numpy as np
+from .helpers import test
 
 
 class Main:
@@ -12,4 +12,4 @@ class Main:
 
     def main():
         """Main function."""
-        print(np.zeros(10))
+        print(test())
