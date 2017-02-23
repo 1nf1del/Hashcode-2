@@ -156,7 +156,7 @@ class Main:
             if len(self.endpoints[x.R_e].connections) == 0:
                 return 0
             return x.R_n * (self.endpoints[x.R_e].latency -
-                    self.endpoints[x.R_e].connections[0][1])
+                            self.endpoints[x.R_e].connections[0][1])
         # 1. Sort requests by interest
         new_requests = list()
         for request in self.requests:
@@ -168,7 +168,8 @@ class Main:
         for _, request in new_requests:
             for c, L_c in self.endpoints[request.R_e].connections:
                 # connection is (c, L_c)
-                if self.caches[c].add_video2(self.X, request.R_v, self.size_videos):
+                if self.caches[c].add_video2(self.X, request.R_v,
+                                             self.size_videos):
                     break
 
     def run(self):
@@ -177,5 +178,5 @@ class Main:
         self.caches = [Cache(i, list()) for i in range(self.C)]
         # self.dummy()
         self.better()
-        # print(self.scoring())
-        self.save_data()
+        print(self.scoring())
+        # self.save_data()
