@@ -4,7 +4,7 @@ Hashcode qualification 2017
 # Environment
 Create conda environement::
 
-    conda create -n hashcode python=3 anaconda numpy scipy ipython
+    conda create -n hashcode python=3 anaconda numpy scipy ipython scikit-learn
 
 Activate environment::
 
