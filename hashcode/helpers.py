@@ -5,11 +5,6 @@ from __future__ import (absolute_import, division, print_function,
 import numpy as np
 
 
-def test(data):
-    """Test function."""
-    return np.exp(data)
-
-
 def readint():
     """Read array on standard input."""
     return int(input())
