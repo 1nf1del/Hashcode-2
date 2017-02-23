@@ -117,4 +117,4 @@ class Main:
         self.caches = [Cache(i, list()) for i in range(self.C)]
         score = self.scoring()
         print(score)
-        self.save_data()
+        # self.save_data()
