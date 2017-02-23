@@ -1,4 +1,4 @@
-# Hashcode
+# Hashcode [![Build Status](https://travis-ci.com/RomainBrault/Hashcode.svg?token=BGkmfYrnrsiGdq17pxis&branch=master)](https://travis-ci.com/RomainBrault/Hashcode)
 Hashcode qualification 2017
 
 # Environment
