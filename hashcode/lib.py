@@ -111,6 +111,9 @@ class Main:
                                       maximum)
         return average * 1000 / self.R
 
+    def romain(self):
+        for enpoint in self.endpoints:
+
     def dummy(self):
 
         boolean = True
