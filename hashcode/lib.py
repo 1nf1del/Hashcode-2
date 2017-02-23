@@ -130,11 +130,12 @@ class Main:
     def better(self):
         for request in self.requests:
             for connection in self.endpoints[request.R_e].connections:
+                pass
 
     def run(self):
         """Main function."""
         self.load_data()
         self.caches = [Cache(i, list()) for i in range(self.C)]
         self.dummy()
-        # print(self.scoring())
-        self.save_data()
+        print(self.scoring())
+        # self.save_data()
