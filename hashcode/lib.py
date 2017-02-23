@@ -16,9 +16,9 @@ class Cache:
 
     def add_video(self, X, video, size_videos):
         if video in self.videos:
-            return false
+            return False
         if self.size + size_videos[video] > X:
-            return false
+            return False
         self.size += size_videos[video]
         self.videos.add(video)
         return True
@@ -96,12 +96,11 @@ class Main:
         for i in range(self.R):
             R_v, R_e, R_n = readarray(int)
             self.requests.append(Request(i, R_v, R_e, R_n))
-        print(self.R)
-        print(len(self.requests))
 
     def scoring(self):
         """Scoring function."""
         average = 0.
+        number_requests = 0.
         for request in self.requests:
             maximum = self.endpoints[request.R_e].latency
             for c, L_c in self.endpoints[request.R_e].connections.items():
@@ -109,23 +108,25 @@ class Main:
                     maximum = L_c
             average += request.R_n * (self.endpoints[request.R_e].latency -
                                       maximum)
-        return average * 1000 / self.R
+            number_requests += request.R_n
+        return average * 1000 / number_requests
 
     def dummy(self):
 
         boolean = True
         while boolean:
             boolean = False
+            v = 0
             while v < self.V:
                 for cache in self.caches:
-                    if cache.add_video(v, self.size_videos):
-                        v += 1
+                    if cache.add_video(self.X, v, self.size_videos):
                         boolean = True
+                    v += 1
 
     def run(self):
         """Main function."""
         self.load_data()
         self.caches = [Cache(i, list()) for i in range(self.C)]
-        score = self.scoring()
-        print(score)
-        # self.save_data()
+        self.dummy()
+        # print(self.scoring())
+        self.save_data()
