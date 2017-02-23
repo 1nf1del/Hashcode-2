@@ -10,4 +10,3 @@ install:
 script:
   - chmod +x run
   - ./run
-
