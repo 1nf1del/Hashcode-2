@@ -2,9 +2,16 @@
 
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
-from .helpers import readint, readarray
+from .helpers import readarray
 
-import numpy as np
+
+class Cache:
+    """Class cache."""
+
+    def __init__(self, id, videos):
+        """Init cache."""
+        self.id = id
+        self.videos = set(videos)
 
 
 class Endpoint:
@@ -42,11 +49,15 @@ class Main:
         """String representation."""
         return 'Main version %d' % (self._version)
 
-    @staticmethod
-    def save_data(n_cache_servers):
+    def validation(self):
+        """Validate save."""
+
+    def save_data(self):
         """Save data."""
-        with open('./bin/results.out', 'w') as file:
-            pass
+        n_caches = len(self.caches)
+        print(n_caches)
+        for i in range(n_caches):
+            print(self.caches[i].id, *self.caches[i].videos)
 
     def load_data(self):
         """Load data."""
@@ -79,3 +90,5 @@ class Main:
     def run(self):
         """Main function."""
         self.load_data()
+        self.caches = [Cache(0, [2]), Cache(1, [3, 1]), Cache(2, [0, 1])]
+        self.save_data()
