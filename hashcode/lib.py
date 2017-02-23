@@ -95,8 +95,8 @@ class Main:
         average = 0.
         for request in self.requests:
             maximum = self.endpoints[request.R_e].latency
-            for c, L_c in self.enpoints[request.R_e].connections.items():
-                if request.R_v in self.caches[c] and L_c < maximum:
+            for c, L_c in self.endpoints[request.R_e].connections.items():
+                if request.R_v in self.caches[c].videos and L_c < maximum:
                     maximum = L_c
             average += request.R_n * (self.endpoints[request.R_e].latency -
                                       maximum)
@@ -105,6 +105,6 @@ class Main:
     def run(self):
         """Main function."""
         self.load_data()
-        for i in range():
-            self.caches = [Cache(0, [2]), Cache(1, [3, 1]), Cache(2, [0, 1])]
+        self.caches = [Cache(0, [2]), Cache(1, [3, 1]), Cache(2, [0, 1])]
+        print(self.scoring())
         self.save_data()
