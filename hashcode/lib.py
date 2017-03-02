@@ -5,6 +5,7 @@ from __future__ import (absolute_import, division, print_function,
 from operator import itemgetter
 from .helpers import readarray
 import numpy as np
+from math import log2
 
 
 class Cache:
@@ -201,6 +202,23 @@ class Main:
 
     def better(self):
         """Run better."""
+        def score_request(x):
+            if len(self.endpoints[x.R_e].connections) == 0:
+                return 0
+            return x.R_n * (self.endpoints[x.R_e].latency -
+                            self.endpoints[x.R_e].connections[0][1])
+
+        def score_new_request(x):
+            if len(self.endpoints[x.R_e].connections) == 0:
+                return 0
+            previous_score = self.endpoints[x.R_e].latency
+            for c, L_c in self.endpoints[x.R_e].connections:
+                if x.R_v in self.caches[c].videos and L_c < previous_score:
+                    previous_score = L_c
+            return x.R_n * (previous_score -
+                            self.endpoints[x.R_e].connections[0][1]) - \
+                previous_score
+
         # 1. Sort requests by interest
         new_requests = list()
         for request in self.requests:
@@ -209,12 +227,27 @@ class Main:
         new_requests.sort(key=lambda x: x[0], reverse=True)
 
         # 2. Deal with requests in the specified order
-        for _, request in new_requests:
-            for c, L_c in self.endpoints[request.R_e].connections:
-                # connection is (c, L_c)
-                if self.caches[c].add_video2(self.X, request.R_v,
-                                             self.size_videos):
+        n = 0
+        recompute = set([2**i for i in range(int(log2(self.R)))])
+        while True:
+            for _, request in new_requests:
+                n += 1
+                for c, L_c in self.endpoints[request.R_e].connections:
+                    # connection is (c, L_c)
+                    if self.caches[c].add_video2(self.X, request.R_v,
+                                                 self.size_videos):
+                        break
+                if n in recompute:
                     break
+            new_requests = new_requests[n:]
+            if len(new_requests) == 0:
+                break
+            tmp_requests = list()
+            for _, request in new_requests:
+                heuristic = score_new_request(request)
+                tmp_requests.append((heuristic, request))
+            new_requests = sorted(tmp_requests, key=lambda x: x[0],
+                                  reverse=True)
 
     def run(self):
         """Main function."""
@@ -222,6 +255,6 @@ class Main:
         self.caches = [Cache(i, list()) for i in range(self.C)]
         self.romain()
         # self.dummy()
-        # self.better()
+        self.better()
         # print(self.scoring())
         self.save_data()
