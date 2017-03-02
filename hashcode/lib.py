@@ -249,11 +249,15 @@ class Main:
             new_requests = sorted(tmp_requests, key=lambda x: x[0],
                                   reverse=True)
 
+    def run_test(self):
+        """Main test function."""
+        pass
+
     def run(self):
         """Main function."""
         self.load_data()
         self.caches = [Cache(i, list()) for i in range(self.C)]
-        self.romain()
+        # self.romain()
         # self.dummy()
         self.better()
         # print(self.scoring())
