@@ -4,6 +4,8 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 from .helpers import readarray
 from math import log2
+import numpy as np
+import sys
 
 
 class Cache:
@@ -196,11 +198,69 @@ class Main:
                 tmp_requests.append((heuristic, request))
             new_requests = sorted(tmp_requests, key=lambda x: x[0], reverse=True)
 
+    def extended(self):
+        class RequestedVideo:
+            def __init__(self, video, size):
+                self.video = video
+                self.size = size
+                self.vidrequests = list()
+                self.score = 0.
+
+            def compute_score(self, endpoints):
+                for x in self.vidrequests:
+                    if len(endpoints[x.R_e].connections) == 0:
+                        continue
+                    self.score += x.R_n * (endpoints[x.R_e].latency -
+                                           endpoints[x.R_e].connections[0][1])
+
+            def compute_score_caches(self, endpoints):
+                seen_caches = set()
+                result_caches = list()
+                while len(seen_caches) < 200000000:
+                    caches = dict()
+                    for x in self.vidrequests:
+                        boolean = False
+                        for c, L_c in endpoints[x.R_e].connections:
+                            if c in seen_caches:
+                                boolean = True
+                                break
+                        if boolean:
+                            continue
+                        for c, L_c in endpoints[x.R_e].connections:
+                            if c not in caches:
+                                caches[c] = 0.
+                            caches[c] += x.R_n * (endpoints[x.R_e].latency - L_c) / self.size
+                    if len(caches) == 0:
+                        break
+                    lcaches = list(caches.items())
+                    lcaches.sort(key=lambda x: x[1], reverse=True)
+                    seen_caches.add(lcaches[0][0])
+                    result_caches.append((lcaches[0][0], lcaches[0][1],self.video))
+                return result_caches    # [(cache1, score, video), (cache2, score, video)]
+
+        new_requests = dict()
+        for request in self.requests:
+            if request.R_v not in new_requests:
+                new_requests[request.R_v] = RequestedVideo(request.R_v,
+                                                           self.size_videos[request.R_v])
+            new_requests[request.R_v].vidrequests.append(request)
+        allvideos_caches = list()
+        for rvid in new_requests.values():
+            allvideos_caches += rvid.compute_score_caches(self.endpoints)
+        # L = list(new_requests.values())
+        # L.sort(key=lambda x: x.score, reverse=True)
+        allvideos_caches.sort(key=lambda x: x[1], reverse=True)
+        for c, _, video in allvideos_caches:
+            boolean = self.caches[c].add_video2(self.X, video, self.size_videos)
+            #     if boolean:
+            #         break
+
     def run(self):
         """Main function."""
         self.load_data()
         self.caches = [Cache(i, list()) for i in range(self.C)]
         # self.dummy()
-        self.better()
-        # print(self.scoring())
+        # self.better()
+        self.extended()
+        sys.stderr.write("%f\n"%self.scoring())
         self.save_data()
