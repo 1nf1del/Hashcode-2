@@ -2,7 +2,9 @@
 
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
+from operator import itemgetter
 from .helpers import readarray
+import numpy as np
 
 
 class Cache:
@@ -46,7 +48,7 @@ class Endpoint:
         # (c, L_c) where c: ID cache server, L_c: latency
         self.connections = list()
 
-    def sort_connections(self):
+    def _sort_connections(self):
         self.connections.sort(key=lambda x: x[1])
 
 
@@ -59,6 +61,7 @@ class Request:
         self.R_v = R_v  # Id video
         self.R_e = R_e  # Id endpoint
         self.R_n = R_n  # Number of requests
+
 
 class Main:
     """Main class."""
@@ -87,9 +90,10 @@ class Main:
         if good is False:
             raise ValueError('Too much memory use for cache %d' % i)
 
-    def save_data(self):
+    def save_data(self, validation=False):
         """Save data."""
-        self.validation()
+        if validation is True:
+            self.validation()
         n_caches = len(self.caches)
         print(n_caches)
         for i in range(n_caches):
@@ -106,7 +110,7 @@ class Main:
             for j in range(K):
                 c, L_c = readarray(int)
                 self.endpoints[i].connections.append((c, L_c))
-            self.endpoints[i].sort_connections()
+            self.endpoints[i]._sort_connections()
         self.requests = list()
         for i in range(self.R):
             R_v, R_e, R_n = readarray(int)
@@ -126,6 +130,17 @@ class Main:
             number_requests += request.R_n
         return average * 1000 / number_requests
 
+    def _score_request(self, x, cache_id=None):
+        if len(self.endpoints[x.R_e].connections) == 0:
+            return 0
+        if cache_id is None:
+            return x.R_n * (self.endpoints[x.R_e].latency -
+                            self.endpoints[x.R_e].connections[0][1])
+        else:
+            return [x.R_n * (self.endpoints[x.R_e].latency -
+                             self.endpoints[x.R_e].connections[cid][1])
+                    for cid in range(self.endpoints[x.R_e].K)]
+
     def dummy(self):
         """Run dummy."""
         boolean = True
@@ -139,28 +154,57 @@ class Main:
                     v += 1
 
     def romain(self):
-        for endpoint in self.endpoints:
-            local_request = []
+        """Run Romain."""
+        video_stats = [[list(), 0, set(), 0, 0] for _ in range(self.V)]
+        for video_idx in range(self.V):
             for request in self.requests:
-                if request.R_e == endpoint.endpoint:
-                    local_request.append(request)
-            local_request.sort(key=lambda x: x.R_n)
+                if request.R_v == video_idx:
+                    # ~available memory for the video
+                    score1 = self.endpoints[request.R_e].K
+                    score1 /= self.size_videos[video_idx] ** 3
+                    # ~sum latency on caches
+                    score2 = np.sum(self._score_request(request, 'all'))
+                    score2 /= self.size_videos[video_idx] ** 3
+                    video_stats[video_idx][0].append([request.R_e,
+                                                      score1, score2])
+                    video_stats[video_idx][1] = video_idx
+                    video_stats[video_idx][2].add(request.R_e)
+                    global_score1 = np.mean(
+                        [tlp[1] for tlp in video_stats[video_idx][0]])
+                    global_score2 = np.mean(
+                        [tlp[2] for tlp in video_stats[video_idx][0]])
+                    # print(global_score1)
+                    # print(global_score2 / 1000000)
+                    video_stats[video_idx][3] = global_score1
+                    video_stats[video_idx][4] = global_score2
+        video_stats.sort(key=itemgetter(4), reverse=True)
+        video_stats.sort(key=itemgetter(3), reverse=True)
 
-            for request in local_request:
-                for cache in self.caches:
-                    if cache.add_video2(self.X, request.R_v, self.size_videos):
+        for video in video_stats:
+            if video[3] == 0:
+                break
+            for endpoint_id in video[2]:
+                for c, L_v in self.endpoints[endpoint_id].connections:
+                    # charge = 0
+                    # charge = abs(self.X - self.caches[c].size) * .5
+                    # charge = np.inf
+                    # charge = self.size_videos[video[1]] / self.X
+                    # if charge > .5 and abs(video[3]) < 10000:
+                    #     break
+                    if self.caches[c].add_video2(self.X, video[1],
+                                                 self.size_videos):
                         break
+        # print([video[3] for video in video_stats])
+        # print([video[4] for video in video_stats])
+        # print(self.size_videos[15], self.X)
+        # print(self.endpoints[0].connections)
 
     def better(self):
-        def score_request(x):
-            if len(self.endpoints[x.R_e].connections) == 0:
-                return 0
-            return x.R_n * (self.endpoints[x.R_e].latency -
-                            self.endpoints[x.R_e].connections[0][1])
+        """Run better."""
         # 1. Sort requests by interest
         new_requests = list()
         for request in self.requests:
-            heuristic = score_request(request)
+            heuristic = self._score_request(request)
             new_requests.append((heuristic, request))
         new_requests.sort(key=lambda x: x[0], reverse=True)
 
@@ -176,7 +220,8 @@ class Main:
         """Main function."""
         self.load_data()
         self.caches = [Cache(i, list()) for i in range(self.C)]
+        self.romain()
         # self.dummy()
-        self.better()
-        print(self.scoring())
-        # self.save_data()
+        # self.better()
+        # print(self.scoring())
+        self.save_data()
