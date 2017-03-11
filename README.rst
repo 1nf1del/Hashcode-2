@@ -9,7 +9,7 @@
 Hashcode |Travis|_ |Python36|_
 ========
 
-Hashcode qualification 2017
+Hashcode qualification 2017. https://hashcodejudge.withgoogle.com/#/home. Score: 2500394
 
 Environment
 ===========
